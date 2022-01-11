@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Chest.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"star-lapsi.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="通向何方一个月前，我对于整个项目的定义是明确的，我希望通过项目达到两个目的：  训练自己的开发编程能力。 探索一种新的学习思路。  为了达到目的，我最初的思路是借鉴Minecraft玩耍过程中的经验，通过“探索”来给自己提供开发需求，并在实现需求的过程中不断学习，这样可以解决“缺少需求”的矛盾。但是对于“探索”，我是缺乏方向感的，我到底要探索多久？会不会一些模块在探索过程中始终用不上呢？如何能够保">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Inconsistency(1) - 对项目的重新思考">
+<meta property="og:url" content="http://star-lapsi.github.io/2021/10/14/inconsistency-1-rethinking-about-project/index.html">
+<meta property="og:site_name" content="MeCraft">
+<meta property="og:description" content="通向何方一个月前，我对于整个项目的定义是明确的，我希望通过项目达到两个目的：  训练自己的开发编程能力。 探索一种新的学习思路。  为了达到目的，我最初的思路是借鉴Minecraft玩耍过程中的经验，通过“探索”来给自己提供开发需求，并在实现需求的过程中不断学习，这样可以解决“缺少需求”的矛盾。但是对于“探索”，我是缺乏方向感的，我到底要探索多久？会不会一些模块在探索过程中始终用不上呢？如何能够保">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-14T09:22:20.000Z">
+<meta property="article:modified_time" content="2021-10-20T02:05:34.000Z">
+<meta property="article:author" content="Trace-w5">
+<meta property="article:tag" content="MeCraft">
+<meta property="article:tag" content="Inconsistency">
+<meta property="article:tag" content="反思">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://star-lapsi.github.io/2021/10/14/inconsistency-1-rethinking-about-project/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Inconsistency(1) - 对项目的重新思考 | MeCraft</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+      <a target="_blank" rel="noopener" href="https://github.com/star-lapsi" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">MeCraft</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://star-lapsi.github.io/2021/10/14/inconsistency-1-rethinking-about-project/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chest.png">
+      <meta itemprop="name" content="Trace-w5">
+      <meta itemprop="description" content="如果你知道这个世界只是一个Minecraft">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MeCraft">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Inconsistency(1) - 对项目的重新思考
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-14 17:22:20" itemprop="dateCreated datePublished" datetime="2021-10-14T17:22:20+08:00">2021-10-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-20 10:05:34" itemprop="dateModified" datetime="2021-10-20T10:05:34+08:00">2021-10-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Inconsistency/" itemprop="url" rel="index"><span itemprop="name">Inconsistency</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="通向何方"><a href="#通向何方" class="headerlink" title="通向何方"></a>通向何方</h2><p>一个月前，我对于整个项目的定义是明确的，我希望通过项目达到两个目的：</p>
+<ol>
+<li>训练自己的开发编程能力。</li>
+<li>探索一种新的学习思路。</li>
+</ol>
+<p>为了达到目的，我最初的思路是借鉴Minecraft玩耍过程中的经验，通过“探索”来给自己提供开发需求，并在实现需求的过程中不断学习，这样可以解决“缺少需求”的矛盾。但是对于“探索”，我是缺乏方向感的，我到底要探索多久？会不会一些模块在探索过程中始终用不上呢？如何能够保证对于开发的掌握效率呢？更关键的是，既然要探索一种新的学习思路，那么我的思路有何特别？</p>
+<span id="more"></span>
+
+<h2 id="思路对比"><a href="#思路对比" class="headerlink" title="思路对比"></a>思路对比</h2><p>按照传统的教学思路，开发学习基本路线是：程序设计语言→数据结构→算法。具体到某个程序语言，大致也是先了解基本输入输出，然后是分支和循环，掌握比较复杂的变量比如数组结构体，最后涉及各类文件操作。这个路线从易到难，是一个标准的学习过程，配合良好的练习即可较好地掌握整个语言乃至算法。这个过程尤其适合一般的教学，但是对于自学者来说却是不利的。<br>自学者和学生最大的差异就在于动力源，任务需要自己指派，由于没有强制性的绩点来对自己进行考核，很容易陷入“三分钟热度”。而开发很关键的一个点就是练习，没有充分的练习无法掌握知识点，而没有足够的实践应用也是不行的。这并不容易，主要有两个原因：</p>
+<ol>
+<li>学习动力是否充足？</li>
+<li>怎么避免缺乏目的带来的挫败感？</li>
+</ol>
+<p>前者需要学习的人自己摆正心态、明确目的。但仅仅如此是不够的，一旦缺乏实际应用，练习过程会变得极为枯燥乏味。本质来说，就是没有“自己的需求”，而只有一些不明所以的“习题”。这时候除非有足够的压力，否则往往难以坚持下去。那么如何持续性地形成需求呢？这是MeCraft项目要解决的问题。项目核心其实不在于探索学习路线，而在于探索一种“需求创造流”，源源不断的需求而且是比能够给学习者带来成就感——当然这并不代表适合所有人。</p>
+<h2 id="为何是Minecraft"><a href="#为何是Minecraft" class="headerlink" title="为何是Minecraft"></a>为何是Minecraft</h2><p>进入Minecraft和打开编辑器的想法往往是相似的：都想创造一些东西。<br>但是二者也会带来相同的问题：创造一些什么呢？<br>如果只是对着编辑器，大概是什么都想不出来的。在Minecraft里面，想法就会多一些。首先你要想办法生存下来，然后要改善自己的生活，进一步地去探索未知的区域。Minecraft的游戏性让你需要不断去探索已经建构好的世界，那么这个数据构成的世界，不恰好也是如此吗？不搞开发，也可以进行浅层的探索，但总归失于表面化，也就很难做出足够多的创造性工作：就如同在Minecraft里面一样。</p>
+<h2 id="最初的问题"><a href="#最初的问题" class="headerlink" title="最初的问题"></a>最初的问题</h2><p>既然借鉴了Minecraft的思路，那么：如何探索？<br>Minecraft的游戏过程，贯穿始终的操作有四个：运动、收集、处理、使用。从精神上来说，就是探索和创造。从过程上来说，就是生存、发展、自我实现。这一切的背后，都有两个隐藏的、贯穿始终的点：学习及实践。这和我学习开发的过程是类似的：不断学习，不断应用，不断进步。由于设定不同，所以实践层面我们大概可以先跳过“生存”二字而直接走向发展和自我实现：相当于直接进行探索和创造。<br>先说现实任务：</p>
+<ol>
+<li>掌握语言基础语法。</li>
+<li>掌握数据结构知识。</li>
+<li>掌握算法知识。</li>
+<li>掌握操作系统、网络、硬件等相关知识。</li>
+<li>开展开发项目。</li>
+<li>项目维护及改进。</li>
+</ol>
+<p>语法是探索的基础，相当于MC中的合成书，如果不了解合成书，就无法合成出所需的基本材料，也就无法开采新的材料。在拥有了足够的所需材料之后，我们需要对材料进行合理的存放，这就是数据结构所探索的点。另外，收集来的材料还需要合理规制，因为我们在创造过程中需要对数据进行一定的处理和使用，这就是算法的内容了。</p>
+<p>有了这三个基础，那么就要真正走出去探索，了解数据世界的原有构成。通过已经掌握的工具，获取更多的材料，并对收集的材料进行更多的分析。在一定的了解之后，就可以考虑做一件事情：那就是创造出真正的使用工具，搞一个自己的项目，然后不断维护、改进——说起来，就像是我在MC里面建设那条超级铁路一般。</p>
+<h2 id="起步到发展"><a href="#起步到发展" class="headerlink" title="起步到发展"></a>起步到发展</h2><p>整个项目的起点，就是最简单的收集、最简单的处理、最简单的使用。Welcome就是最简单的使用：无收集、不处理，直接使用。这里可以掌握两个内容：输出以及函数。函数就是一个内嵌的小程序，一般需要输入或者输出，不论这个输入是后续获取的，还是事先设定的。<br>进一步的就是收集、处理。<br>所有的数据都可以认为是同一种东西，但是为了处理起来方便，一般会将其细分出去，通过特定的容器作为承载：这个容器就是变量！所谓容器的细分，就是变量的数据类型。往往有定制化容器的要求，结构体就应运而生了。<br>最简单的处理，就是选择，即有条件的处理，这里可以延伸出重复处理。处理这个操作一般无法孤立存在，必须有收集并有所使用：否则处理就失去了意义不是？但也因此，处理可以说是最有意思的内容：因为大多数情况下，为了把收集的东西处理好，是非常花脑子的！<br>上述的这些经验积累，我之前实现了一部分：比如简单的静态数据收集和动态数据收集、比较简单的排序处理、简单的静态数据和动态数据使用。然后为了后续探索的方便，我开始编写一些工具，比如高精度四则运算，这个是为了保证后续使用做准备。但是问题在于，我之前的需求就停在这里了！</p>
+<h2 id="工具不是目的"><a href="#工具不是目的" class="headerlink" title="工具不是目的"></a>工具不是目的</h2><p>这是项目进行到一定程度遇到的最大问题：需求终止。<br>事实上，这个阶段我其实已经可以开始考虑“创造”了，但是我却急于学习数据结构和算法。这并不是现实需求，而是“教科书需求”，这让我失去了很多的创造力。事实上，在完成前面的几个基础程序之后，这时候就应该考虑弄点自己的东西了：这才是需求的关键来源。只是考虑按部就班去练习数据结构和算法，结果就是把工具当作了目的，这恰恰是对学习或者练习动力的摧残。</p>
+<h2 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h2><p>所以，项目终归到了最麻烦的一步：提出实际的需求！那么我有什么需求呢？这就是后面我需要思考的问题了。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Trace-w5
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://star-lapsi.github.io/2021/10/14/inconsistency-1-rethinking-about-project/" title="Inconsistency(1) - 对项目的重新思考">http://star-lapsi.github.io/2021/10/14/inconsistency-1-rethinking-about-project/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MeCraft/" rel="tag"># MeCraft</a>
+              <a href="/tags/Inconsistency/" rel="tag"># Inconsistency</a>
+              <a href="/tags/%E5%8F%8D%E6%80%9D/" rel="tag"># 反思</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/07/mecraft-7-new-start-of-mecraft/" rel="prev" title="MeCraft项目(7) - 阶段反思：针对MeCraft的开展形式">
+      <i class="fa fa-chevron-left"></i> MeCraft项目(7) - 阶段反思：针对MeCraft的开展形式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/11/begin-this%20is%20mecraft%20world/" rel="next" title="这里就是MeCraft的世界">
+      这里就是MeCraft的世界 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E5%90%91%E4%BD%95%E6%96%B9"><span class="nav-number">1.</span> <span class="nav-text">通向何方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF%E5%AF%B9%E6%AF%94"><span class="nav-number">2.</span> <span class="nav-text">思路对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E6%98%AFMinecraft"><span class="nav-number">3.</span> <span class="nav-text">为何是Minecraft</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%88%9D%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">最初的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%B7%E6%AD%A5%E5%88%B0%E5%8F%91%E5%B1%95"><span class="nav-number">5.</span> <span class="nav-text">起步到发展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E4%B8%8D%E6%98%AF%E7%9B%AE%E7%9A%84"><span class="nav-number">6.</span> <span class="nav-text">工具不是目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5"><span class="nav-number">7.</span> <span class="nav-text">下一步</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Trace-w5"
+      src="/images/Chest.png">
+  <p class="site-author-name" itemprop="name">Trace-w5</p>
+  <div class="site-description" itemprop="description">如果你知道这个世界只是一个Minecraft</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Trace-w5</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Chest.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"star-lapsi.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="最初只想优化这两天我在努力实现另外两个排序算法，也就是插入排序和改进版本的希尔排序。今天了解到插入排序有一种初步的优化，也就是二分式插入排序，于是打算先把这个优化实现了。不过我实现插入排序的时候，没有使用线性表而是用最传统的数组来实现的，因此每次插入都涉及到数据的移动（线性表可以直接修改插入点两侧的元素的指针）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MeCraft随笔(2) - 边界是排序的杀手">
+<meta property="og:url" content="http://star-lapsi.github.io/2021/09/14/meessay-2-boundary-is-key-to-sorting/index.html">
+<meta property="og:site_name" content="MeCraft">
+<meta property="og:description" content="最初只想优化这两天我在努力实现另外两个排序算法，也就是插入排序和改进版本的希尔排序。今天了解到插入排序有一种初步的优化，也就是二分式插入排序，于是打算先把这个优化实现了。不过我实现插入排序的时候，没有使用线性表而是用最传统的数组来实现的，因此每次插入都涉及到数据的移动（线性表可以直接修改插入点两侧的元素的指针）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-14T11:49:15.000Z">
+<meta property="article:modified_time" content="2021-09-15T13:18:04.000Z">
+<meta property="article:author" content="Trace-w5">
+<meta property="article:tag" content="MeCraft">
+<meta property="article:tag" content="二分法">
+<meta property="article:tag" content="数组">
+<meta property="article:tag" content="插入排序">
+<meta property="article:tag" content="算法优化">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://star-lapsi.github.io/2021/09/14/meessay-2-boundary-is-key-to-sorting/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MeCraft随笔(2) - 边界是排序的杀手 | MeCraft</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+      <a target="_blank" rel="noopener" href="https://github.com/star-lapsi" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">MeCraft</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://star-lapsi.github.io/2021/09/14/meessay-2-boundary-is-key-to-sorting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chest.png">
+      <meta itemprop="name" content="Trace-w5">
+      <meta itemprop="description" content="如果你知道这个世界只是一个Minecraft">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MeCraft">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MeCraft随笔(2) - 边界是排序的杀手
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-14 19:49:15" itemprop="dateCreated datePublished" datetime="2021-09-14T19:49:15+08:00">2021-09-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-15 21:18:04" itemprop="dateModified" datetime="2021-09-15T21:18:04+08:00">2021-09-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MeCraft%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">MeCraft随笔</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="最初只想优化"><a href="#最初只想优化" class="headerlink" title="最初只想优化"></a>最初只想优化</h2><p>这两天我在努力实现另外两个排序算法，也就是插入排序和改进版本的希尔排序。今天了解到插入排序有一种初步的优化，也就是二分式插入排序，于是打算先把这个优化实现了。不过我实现插入排序的时候，没有使用线性表而是用最传统的数组来实现的，因此每次插入都涉及到数据的移动（线性表可以直接修改插入点两侧的元素的指针）。</p>
+<span id="more"></span>
+
+<h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><p>原本的插入排序，我设置了1+2的两层循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 外部循环：标识i从第一个元素（或简化为第二个）开始向后搜索，一直到数组结束。</span><br><span class="line">2. 内部循环：包含两个分开的循环，分别是比较和移动：</span><br><span class="line">   * 比较循环：标识j从第一个元素向后搜索，并比较[i]和[j]，发现[i]&lt;[j]或i=j时比较完成。</span><br><span class="line">   * 移动循环：将j到i之间的元素全部后移一格，并将[i]赋值到[j]。</span><br></pre></td></tr></table></figure>
+<p>   上述做法简单，自然也比较缓慢，特别是内部循环，两个循环加一起相当于把数组又遍历了一遍，直接让整个算法的时间复杂度接近n的平方级别。换成二分模式的话，移动循环可能还在，但是比较循环将会变成log2n级别，这样一来效率就有了明显的改善。因此我思考了一下，还是1+2的两层循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 外部循环：同上。</span><br><span class="line">2. 内部循环：包含两个分开的循环，分别是比较和移动：</span><br><span class="line">   * 比较循环：设置一个位置标识j和一个区间标识k，二者取i的一半，进行三步操作：</span><br><span class="line">       * 对比[j]和[j+1]和[i]的大小，如果数值不在二者中间，则判定是太小还是太大。</span><br><span class="line">       * 如果比[j]小，那么区间k取半，位置标识改为j-k；如果比[j+1]大，同样区间k取半，位置标识改为j+1+k。</span><br><span class="line">       * 当k=0或者出现[j]&lt;=[i]&lt;=[j+1]时退出循环。</span><br><span class="line">   * 移动循环：将j到i之间的元素全部后移一格，并将[i]赋值到[j]。</span><br></pre></td></tr></table></figure>
+<p>这个实现方式看着非常绕，但是我还是大概写出了算法，不过一执行就出了问题，一开始是进入死循环，然后我发现少考虑k=0这个条件。解决了之后，运算结果还是异常，这就让我开始思考问题所在了。</p>
+<h2 id="位置、区间和边界"><a href="#位置、区间和边界" class="headerlink" title="位置、区间和边界"></a>位置、区间和边界</h2><p>我的目的，显然是为了找到[j]&lt;=[i]&lt;=[j+1]这种情况，这时候我开始怀疑边界问题的影响了，因为很可能执行下来会有三种情况：<br>    区间情况1：[j]&lt;=[i]&lt;=[j+1]，此刻退出循环体，将j+1开始的元素集体后移。<br>    区间情况2：出现j=0，由于j=j-k，而k最初就是j的一半，出现该情况只能是j=k=0，但是如此的话，i=0，而外循环从1开始，因此不会出现。<br>    区间情况3：出现j=i-1的情况，由于k始终是j的一半或0，所以要保证i，j，k为整数，只可能出现在{i,j,k}={2,1,0}的情况（{3,2,1}则意味着j进行过加k操作，这意味着之前j=1，那么这种情况下k=0，反而无法成立，因此该情况不存在）。在这个情况下，循环也可以正确退出，移动也可以正确进行。<br>    区间情况4：k=0且未出现[j]&lt;=[i]&lt;[j+1]的情况，不论[i]在[j]左侧还是在[j+1]右侧，k=0都意味着之前k=1，在区间仅差1的情况，也就是[j-1]或[j+1]的情况下，既然新的位置是[j]，那么必然应该是可以检索到区间的。<br>所以，看似我的算法还是OK的，虽然实现起来很绕，其实我自己都已经想到了另一种优化方案。但是我还是要理解为什么我上面的算法有问题。</p>
+<h2 id="小修小补"><a href="#小修小补" class="headerlink" title="小修小补"></a>小修小补</h2><p>一分析，就发现了问题：移动循环成立的条件是什么？按我的设想，要移动，有两种可能：<br>    1. [j]&lt;=[i]&lt;=[j+1]；<br>    2. [i]&lt;=[j]但j=0，此时k应该也是0，该情况仅会出现再i=1的情况下；<br>所以，需要给移动循环把上面两个循环加上，否则2的情况会在i=1情况下默认进行移动。不过问题并未得到解决，因为我发现我自己把可能性1的弄成了[j]&lt;=[i]&lt;=[j+1]，这会导致移动后顺序错乱。所以考虑到边界，因此我改成了[j]&lt;=[i]&lt;[j+1]，包括条件2也改为了[i]&lt;[j]，避免边界的影响。<br>然而结果还是不对！<br>进一步分析数据，发现了一个尴尬的情况，就是上面提及的情况4。执行比较之后，如果[i]&gt;=[j+1]，k取半之后，再执行j+1+k，但是这可能出现j+1+k超出已排序列的情况，而超出部分就是[i]所在，这样如果k不为0，那么下一次对比就成了[i]==[j]，这可能导致[i]被换到前面去，因此我依旧做了修改。</p>
+<h2 id="关键矛盾"><a href="#关键矛盾" class="headerlink" title="关键矛盾"></a>关键矛盾</h2><p>几次调整后，依旧无法产生正确结果，进行分析后，我开始怀疑比较循环的退出逻辑，原本退出逻辑的构思是建立在两种可能性：找到区间、未找到区间但已经到边界。后者我选择了k=0作为替代，主要是基于上面边界问题的情况4来进行讨论的，然而实际上，一旦k太早变成了0，这个条件就不成立了！<br>k在第n次对比的时候，数值是i/(2^n)，但是作为增量添加到j的k却是i/(2^(n+1))的情况，如情况4所说的，k=0时退出前，会进行以此区间操作，但是由于k=0，这次区间操作完全没有改变位置。当k=1时，系统判定还需要进行以此区间缩小，这是因为我这个算法每次都是用相邻的两个元素去“卡”[i]的区间，这就导致可能出现一种情况：虽然实际对比区间已经到了相邻的元素，但是正好两个元素是[j-1]和[j]时，由于k=0，则j的数值无法改变，最后虽然区间大小已经到位了，但是位置标识却没有改变。</p>
+<h2 id="根深蒂固"><a href="#根深蒂固" class="headerlink" title="根深蒂固"></a>根深蒂固</h2><p>这时候我忽然理解到了算法本身的艺术所在，事实上大多数时候算法看着就像是建模过程，只要把握好数值关系或逻辑关系，就能让流程跑起来。但是选择参数本身就需要一点经验或眼光，我这个算法就是如此，从一开始，就有了非常严重的不足，因为我的思路是“找区间”，但是却没有采用“区间放缩”（类似快排里面的思路），反而采用了“区间搜索”，但是搜索又不是全面的搜索，又是跳着搜索的，啥都想沾，结果啥都不占！<br>从这点来说，这个算法一开始就是跑偏的，但是这并不代表思路本身是失败的（不过从增添的问题来看，也算是失败了），具体实现上也是漏洞百出：为什么我不先试着处理一下边界呢？于是我思考了一下，立足于当前思路重新进行了流程设计：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 外部循环：未改变。</span><br><span class="line">2. 边界判定：如果[i]&lt;[0]或大于[i-1]，则j=-1或j=i-1;</span><br><span class="line">3. 内部循环：包含两个分开的循环，分别是比较和移动：</span><br><span class="line">   * 比较循环：设置一个位置标识j和一个区间标识k，二者取i的一半，进行三步操作：</span><br><span class="line">       * 满足[j]&lt;=[i]&lt;[j+1]时，直接退出循环。</span><br><span class="line">       * 若k/2&gt;0，则k取半。</span><br><span class="line">       * [i]&lt;[j]，则j=j-k；[i]&gt;=[j+1]，则j=j+k。</span><br><span class="line">   * 移动循环：将j+1到i的元素全部后移一格，并将[i]赋值到[j+1]。</span><br></pre></td></tr></table></figure>
+<p>处理了一些细节问题之后，最后总算得出了正确的结果，虽然还是那句话，这种实现方法，其实还是太麻烦了，因为涉及到了太多没必要的边界判定。所以后面，我要用我在思考过程中总结的另一套比较简单的方案。</p>
+<h2 id="回头禅思"><a href="#回头禅思" class="headerlink" title="回头禅思"></a>回头禅思</h2><p>这次的精力影响很是深刻，也让我受到了不少的启发。<br>首先就是边界问题的考虑，边界往往是特殊情况，特殊情况建议事先单拉出来去处理，这样一来可以减少很多后续多余的考虑，我之前在修补的时候各种疯狂加条件，各种疯狂调整区间格式，就是因为一开始就没有处理好边界问题。<br>另外就是边界和基准并不是孤立的问题，既然设置了基准，那么尽可能就要通过基准去进行分析，比如我上面的j，我有时候还去考虑j+1和i的对比，这样就把情况弄得复杂了，最重要是就让边界显得模糊了。<br>最最重要的一点就是，算法还是要考虑合理性，我这个程序的实现虽然最后OK了，但是的确是太过复杂，这种“卡”位置的思路并不能说有什么问题，但是直观性很受印象，结果就是必须考虑一堆的边界问题，而我的另一种思路，就是要解决这个问题。严格来说，下一种思路并不是效率的改进，而是理解上的改进。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Trace-w5
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://star-lapsi.github.io/2021/09/14/meessay-2-boundary-is-key-to-sorting/" title="MeCraft随笔(2) - 边界是排序的杀手">http://star-lapsi.github.io/2021/09/14/meessay-2-boundary-is-key-to-sorting/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MeCraft/" rel="tag"># MeCraft</a>
+              <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" rel="tag"># 二分法</a>
+              <a href="/tags/%E6%95%B0%E7%BB%84/" rel="tag"># 数组</a>
+              <a href="/tags/%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" rel="tag"># 插入排序</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96/" rel="tag"># 算法优化</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/13/mecraft-4-about-main-module/" rel="prev" title="MeCraft项目(4) - MeCraft主要模块列表">
+      <i class="fa fa-chevron-left"></i> MeCraft项目(4) - MeCraft主要模块列表
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/15/meessay-3-understandable-is-kind-of-optimization/" rel="next" title="MeCraft随笔(3) - 通俗易懂也是一种优化">
+      MeCraft随笔(3) - 通俗易懂也是一种优化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%88%9D%E5%8F%AA%E6%83%B3%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">最初只想优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">实现思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E3%80%81%E5%8C%BA%E9%97%B4%E5%92%8C%E8%BE%B9%E7%95%8C"><span class="nav-number">3.</span> <span class="nav-text">位置、区间和边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E4%BF%AE%E5%B0%8F%E8%A1%A5"><span class="nav-number">4.</span> <span class="nav-text">小修小补</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%9F%9B%E7%9B%BE"><span class="nav-number">5.</span> <span class="nav-text">关键矛盾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E6%B7%B1%E8%92%82%E5%9B%BA"><span class="nav-number">6.</span> <span class="nav-text">根深蒂固</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E5%A4%B4%E7%A6%85%E6%80%9D"><span class="nav-number">7.</span> <span class="nav-text">回头禅思</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Trace-w5"
+      src="/images/Chest.png">
+  <p class="site-author-name" itemprop="name">Trace-w5</p>
+  <div class="site-description" itemprop="description">如果你知道这个世界只是一个Minecraft</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Trace-w5</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Chest.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"star-lapsi.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="千变万化先前的探索中，我们已经能够获取静态或动态数据，但是这些数据是非常混乱的。我可以通过字符串进行保存，但是这么做并没有解决问题：数据的关键还在于内容，就像Minecraft里面方块的都有自己的作用，如果不加区分，那么就无法真正产生效用。因此，我需要做一个简单的阅读器工具，作为标准化输入工具。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MeCraft项目(5) - 阅读器和标准格式">
+<meta property="og:url" content="http://star-lapsi.github.io/2021/09/17/mecraft-5-reader-for-better-reading/index.html">
+<meta property="og:site_name" content="MeCraft">
+<meta property="og:description" content="千变万化先前的探索中，我们已经能够获取静态或动态数据，但是这些数据是非常混乱的。我可以通过字符串进行保存，但是这么做并没有解决问题：数据的关键还在于内容，就像Minecraft里面方块的都有自己的作用，如果不加区分，那么就无法真正产生效用。因此，我需要做一个简单的阅读器工具，作为标准化输入工具。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://star-lapsi.github.io/2021/09/17/mecraft-5-reader-for-better-reading/image-20211006105249332.png">
+<meta property="article:published_time" content="2021-09-17T12:59:49.000Z">
+<meta property="article:modified_time" content="2021-10-14T11:36:46.000Z">
+<meta property="article:author" content="Trace-w5">
+<meta property="article:tag" content="MeCraft">
+<meta property="article:tag" content="字符串">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://star-lapsi.github.io/2021/09/17/mecraft-5-reader-for-better-reading/image-20211006105249332.png">
+
+<link rel="canonical" href="http://star-lapsi.github.io/2021/09/17/mecraft-5-reader-for-better-reading/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MeCraft项目(5) - 阅读器和标准格式 | MeCraft</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+      <a target="_blank" rel="noopener" href="https://github.com/star-lapsi" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">MeCraft</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://star-lapsi.github.io/2021/09/17/mecraft-5-reader-for-better-reading/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chest.png">
+      <meta itemprop="name" content="Trace-w5">
+      <meta itemprop="description" content="如果你知道这个世界只是一个Minecraft">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MeCraft">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MeCraft项目(5) - 阅读器和标准格式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-17 20:59:49" itemprop="dateCreated datePublished" datetime="2021-09-17T20:59:49+08:00">2021-09-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-14 19:36:46" itemprop="dateModified" datetime="2021-10-14T19:36:46+08:00">2021-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MeCraft%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">MeCraft项目</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="千变万化"><a href="#千变万化" class="headerlink" title="千变万化"></a>千变万化</h2><p>先前的探索中，我们已经能够获取静态或动态数据，但是这些数据是非常混乱的。我可以通过字符串进行保存，但是这么做并没有解决问题：数据的关键还在于内容，就像Minecraft里面方块的都有自己的作用，如果不加区分，那么就无法真正产生效用。因此，我需要做一个简单的阅读器工具，作为标准化输入工具。</p>
+<span id="more"></span>
+
+<h2 id="如何区分"><a href="#如何区分" class="headerlink" title="如何区分"></a>如何区分</h2><p>问题在于，怎么区分？接受数据有两种情况：输入的动态数据以及固定的静态数据。静态数据相对有据可循，我们大致可以提前了解内容所在，比如用后缀名来明确内容可能包含的细节；动态数据比较麻烦，但是我们也可以实现明确目的：比如指示输入。</p>
+<p>不论通过何种方式，当我们成功读取到数据内容的时候，我们就要开始对数据进行分析处理，这一般都要求数据自身带有一个声明，说出“我是XX数据，包含XX内容”。我们找到这个声明之后，就可以按照实现设定的一些标准来对数据进行解析。比如我们假定，数据声明的格式以“&lt;&gt;”符号囊括，然后字符串用“{}”进行包含，那么遇到这样的文件内容时，就可以进行搜索：</p>
+<blockquote>
+<p>&lt;string file&gt;<br>{1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}</p>
+</blockquote>
+<p>我们首先检索一下&lt;&gt;符号所在，找到里面的声明内容，如果声明内容符合格式，就开始进一步解析，如果声明内容异常或没有找到&lt;&gt;，就可以进行退出报错等操作。这中间自然还需要加一些其他的判定细节，这就算需要算法优化的地方了。</p>
+<h2 id="事先约定"><a href="#事先约定" class="headerlink" title="事先约定"></a>事先约定</h2><p>就像我们实际阅读或者游戏中实际收集东西一样，如果没有做好约定，很可能只会中文的我会看到一堆不认识的玛雅文字，或者在游戏里面看到一堆完全不理解含义的方块。那么我们要事先约定一下数据内容。由于reader模块不可能一步到位，那么我理解的最初定位，就是为至少当前的这些程序，提供一个通用的交互规则，用来区分数据的具体类型。</p>
+<h2 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h2><p>理论上，这个阅读器要兼容尽可能多的格式文件，但是考虑到我自己的开发能力，就暂时不折腾那么复杂的架构（太多的文件格式我完全不了解，更别提什么加密的、复杂的文件格式了）。因此，打算从两种比较简单的静态数据入手：</p>
+<ol>
+<li>项目自建规则的内部交互数据格式（按标准格式读取）。</li>
+<li>最基础的文本文档格式（直接读取）。<br>我自己考虑了一下，后续我要实现功能还不确定，但是数据很大程度上只会有三种主要类型：</li>
+<li>整形、浮点型的离散数据。</li>
+<li>连续字符串数据。</li>
+<li>混合类型数据。<br>这三类数据如果要进行读取，那么需要哪些操作呢，大致应该包含以下内容：</li>
+<li>声明部分：明确文件的类型。</li>
+<li>定义部分：明确表头的定义。</li>
+<li>赋值部分：明确各变量的具体类型。<br>考虑到这个要求，于是我考虑整体的标准数据格式如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;文件类型声明&gt;</span><br><span class="line"># 变量名:变量类型;</span><br><span class="line">&#123; &quot;变量名&quot;=&quot;值,值&quot;;&#125;</span><br></pre></td></tr></table></figure>
+案例如下：</li>
+</ol>
+<p><img src="/2021/09/17/mecraft-5-reader-for-better-reading/image-20211006105249332.png" alt="image-20211006105249332"></p>
+<h3 id="标准字段："><a href="#标准字段：" class="headerlink" title="标准字段："></a>标准字段：</h3><p>文件声明类型：numbers（仅数字）、strings（仅字符串）、mixs（数字及字符串混合）。<br>变量类型：integer（整形），float（字符型），char（单字符），string（字符串），addr（地址）。</p>
+<h3 id="字段要求"><a href="#字段要求" class="headerlink" title="字段要求"></a>字段要求</h3><ul>
+<li>变量名仅包含大小写字母、数字和下划线组成。</li>
+<li>变量定义时，变量名和变量类型之间用”:”隔开。</li>
+<li>变量定义时，不同变量分行展示，并用”;”符号隔开。</li>
+<li>变量赋值时，用”{}”符号进行囊括整个赋值内容。</li>
+<li>变量赋值时，变量赋值用”=”分隔开来，另外变量名和变量值需要用**””**包住。</li>
+<li>变量赋值时，变量包含内容多个值（数组）的时候用”,”进行分隔。</li>
+<li>变量赋值时，多个变量赋值用”;”隔开。</li>
+<li>变量赋值时，字符串或者单字符如果需要输入逗号、引号、大括号、冒号，需要用\符号进行转义。</li>
+</ul>
+<h2 id="解析思路"><a href="#解析思路" class="headerlink" title="解析思路"></a>解析思路</h2><p>在对上述这种类型的文件进行解析时，大致包含下列内容：</p>
+<ol>
+<li>解析文件类型（如果不存在则直接退出解析，并反馈报错信息）。</li>
+<li>创建变量关系，这里需要用一些特定的结构来保存和处理变量信息，这里也要判定是否有不符合要求的变量，如果存在有问题的变量名或者变量类型，则报错提示。</li>
+<li>执行变量赋值，从头开始搜索，如果读取的首字母不是”{“则报错，继续检索直到直到不包含转义斜杆的”}”。</li>
+<li>检索过程中，当读取到一个引号时，则在读取到下一个引号时对读取数据进行保存，保存时判定内容是变量名还是赋值内容并进行确认，并在已经保存的变量列表内检索对应的变量。</li>
+<li>存储值的时候首先依据前面确定的变量定义开始对检索内容进行保存，以括号或逗号作为分界线完成从字符串到具体类型的转变。</li>
+<li>按照”;”对检索结果进行分拆。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Trace-w5
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://star-lapsi.github.io/2021/09/17/mecraft-5-reader-for-better-reading/" title="MeCraft项目(5) - 阅读器和标准格式">http://star-lapsi.github.io/2021/09/17/mecraft-5-reader-for-better-reading/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MeCraft/" rel="tag"># MeCraft</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"># 字符串</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/16/intology-7-make-your-hexo-blog-better/" rel="prev" title="Intology项目(7) - Hexo建站运维记录">
+      <i class="fa fa-chevron-left"></i> Intology项目(7) - Hexo建站运维记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/19/meessay-4-some-thought-of-sorting/" rel="next" title="MeCraft随笔(4) - 关于排序后的小想法">
+      MeCraft随笔(4) - 关于排序后的小想法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%83%E5%8F%98%E4%B8%87%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">千变万化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">如何区分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%85%88%E7%BA%A6%E5%AE%9A"><span class="nav-number">3.</span> <span class="nav-text">事先约定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">数据格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%AD%97%E6%AE%B5%EF%BC%9A"><span class="nav-number">4.1.</span> <span class="nav-text">标准字段：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E8%A6%81%E6%B1%82"><span class="nav-number">4.2.</span> <span class="nav-text">字段要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E6%80%9D%E8%B7%AF"><span class="nav-number">5.</span> <span class="nav-text">解析思路</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Trace-w5"
+      src="/images/Chest.png">
+  <p class="site-author-name" itemprop="name">Trace-w5</p>
+  <div class="site-description" itemprop="description">如果你知道这个世界只是一个Minecraft</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Trace-w5</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

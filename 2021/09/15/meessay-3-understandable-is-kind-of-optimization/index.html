@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Chest.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Chest.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"star-lapsi.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="理解就是生产力算法的主体思路，经过一定的学习，并不难理解。但是算法的具体实现，却可能有多种途径类似但细节不同的的方式。设计算法细节时，如果算法易于理解，那么往往意味着实现过程较为方便。但是算法易于理解并不代表容易想到，这本身就是一个否定之否定的演化进程。很多时候，自己想到的第一个念头，未必就是好理解的。易于理解的思路，逻辑性并不会弱，而且条件明晰，这就减少了很多多余的调试时间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MeCraft随笔(3) - 通俗易懂也是一种优化">
+<meta property="og:url" content="http://star-lapsi.github.io/2021/09/15/meessay-3-understandable-is-kind-of-optimization/index.html">
+<meta property="og:site_name" content="MeCraft">
+<meta property="og:description" content="理解就是生产力算法的主体思路，经过一定的学习，并不难理解。但是算法的具体实现，却可能有多种途径类似但细节不同的的方式。设计算法细节时，如果算法易于理解，那么往往意味着实现过程较为方便。但是算法易于理解并不代表容易想到，这本身就是一个否定之否定的演化进程。很多时候，自己想到的第一个念头，未必就是好理解的。易于理解的思路，逻辑性并不会弱，而且条件明晰，这就减少了很多多余的调试时间。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-15T13:15:47.000Z">
+<meta property="article:modified_time" content="2021-09-15T23:28:54.000Z">
+<meta property="article:author" content="Trace-w5">
+<meta property="article:tag" content="MeCraft">
+<meta property="article:tag" content="插入排序">
+<meta property="article:tag" content="算法优化">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://star-lapsi.github.io/2021/09/15/meessay-3-understandable-is-kind-of-optimization/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MeCraft随笔(3) - 通俗易懂也是一种优化 | MeCraft</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+      <a target="_blank" rel="noopener" href="https://github.com/star-lapsi" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">MeCraft</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://star-lapsi.github.io/2021/09/15/meessay-3-understandable-is-kind-of-optimization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chest.png">
+      <meta itemprop="name" content="Trace-w5">
+      <meta itemprop="description" content="如果你知道这个世界只是一个Minecraft">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MeCraft">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MeCraft随笔(3) - 通俗易懂也是一种优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-15 21:15:47" itemprop="dateCreated datePublished" datetime="2021-09-15T21:15:47+08:00">2021-09-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-16 07:28:54" itemprop="dateModified" datetime="2021-09-16T07:28:54+08:00">2021-09-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MeCraft%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">MeCraft随笔</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="理解就是生产力"><a href="#理解就是生产力" class="headerlink" title="理解就是生产力"></a>理解就是生产力</h2><p>算法的主体思路，经过一定的学习，并不难理解。但是算法的具体实现，却可能有多种途径类似但细节不同的的方式。设计算法细节时，如果算法易于理解，那么往往意味着实现过程较为方便。但是算法易于理解并不代表容易想到，这本身就是一个否定之否定的演化进程。很多时候，自己想到的第一个念头，未必就是好理解的。易于理解的思路，逻辑性并不会弱，而且条件明晰，这就减少了很多多余的调试时间。</p>
+<span id="more"></span>
+
+<h2 id="不成体系的思维"><a href="#不成体系的思维" class="headerlink" title="不成体系的思维"></a>不成体系的思维</h2><p>昨天我的排序算法之所以一开始出现各种问题，简单来说就是：不成体系。当我看完了二分插入排序的基本思路时，我的思路是这么演进的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 要在数组里面做二分查找，要有一个位置变量，用来记录每次二分时的位置。</span><br><span class="line">2. 查找的目的就是要找到满足插入条件的一前一后两个元素，用位置变量记录较小值。</span><br><span class="line">3. 不满足插入时，位置变量改变，需要有一个数值不断二分的变量记录位移及区间。</span><br><span class="line">4. 查找流程：</span><br><span class="line">   * 位置变量取中间值和待插入数值对比，看看满足不满足插入条件，满足就结束了。</span><br><span class="line">   * 不满足时，看要继续往数值左半边还是右半边取中值。</span><br><span class="line">   * 明确取中值方向后，位移变量取半。</span><br><span class="line">   * 用位移变量修改位置变量，继续上述查找流程。</span><br></pre></td></tr></table></figure>
+<p>这个思路，看着一步步好像也不是没有道理，但是本质上却是不成体系且混乱的：为什么要一开始纠结那个数值对？数值对本质上就是区间的最小值，为什么不能在最后考虑？位移变量不断缩小是否要考虑等于0的尴尬情况？</p>
+<h2 id="从明确目的开始"><a href="#从明确目的开始" class="headerlink" title="从明确目的开始"></a>从明确目的开始</h2><p>既然是查找插入位置，最终的目的就是找到一个最小区间，区间一侧比插入值小，一侧比插入值大，也就是终点-起点=1。那么可以采用区间缩小的方案：最初区间时整个已排数列，慢慢缩小。而且我们也不用专门设置一个位移变量：而是每次都用区间中间值和待插入数对比，然后按照对比结果调整起点或终点即可。这个算法理解起来干脆很多，基本思路如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 外部循环：标识i从第一个元素（或简化为第二个）开始向后搜索，一直到数组结束。</span><br><span class="line">2. 边界判定：如果[i]&lt;[0]或[i]&gt;[i-1]，则j=-1或j=i-1;</span><br><span class="line">3. 内部循环：包含两个分开的循环，分别是比较和移动：</span><br><span class="line">   * 比较循环：设置起点j和终点k，j等于0，k则为已派序列的结尾即i-1，进行三步操作：</span><br><span class="line">       * 满足k-j&lt;=1时，退出循环。</span><br><span class="line">       * 对比已排序列中间值[(k-j)/2]和[i]的值。</span><br><span class="line">       * [(k-j)/2]&lt;[i]，则起点位置j变为中间值位置；否则，终点位置k变为中间值位置。</span><br><span class="line">   * 移动循环：将j+1到i的元素全部后移一格，并将[i]赋值到[j+1]。</span><br></pre></td></tr></table></figure>
+<p>虽然写出来看着麻烦，但是理解起来却简单很多：特别是不用过多考虑那个奇怪的“位移变量”。</p>
+<h2 id="这就是效率"><a href="#这就是效率" class="headerlink" title="这就是效率"></a>这就是效率</h2><p>原处的算法绕来绕去，虽然探索了一下边界的重要含义，但是弄来弄去结果都是错误的，就是因为中间遗留了实在太多的问题！所以原始中位插入排序的算法我改了很长时间，而在改的过程中找到的、也就是刚刚提及的这个易于理解的改进算法，我实现+debug完成也就5分钟不到就改变了。<br>在开发过程中，这不就是效率的体现？</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Trace-w5
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://star-lapsi.github.io/2021/09/15/meessay-3-understandable-is-kind-of-optimization/" title="MeCraft随笔(3) - 通俗易懂也是一种优化">http://star-lapsi.github.io/2021/09/15/meessay-3-understandable-is-kind-of-optimization/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MeCraft/" rel="tag"># MeCraft</a>
+              <a href="/tags/%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" rel="tag"># 插入排序</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96/" rel="tag"># 算法优化</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/14/meessay-2-boundary-is-key-to-sorting/" rel="prev" title="MeCraft随笔(2) - 边界是排序的杀手">
+      <i class="fa fa-chevron-left"></i> MeCraft随笔(2) - 边界是排序的杀手
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/16/intology-7-make-your-hexo-blog-better/" rel="next" title="Intology项目(7) - Hexo建站运维记录">
+      Intology项目(7) - Hexo建站运维记录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E5%B0%B1%E6%98%AF%E7%94%9F%E4%BA%A7%E5%8A%9B"><span class="nav-number">1.</span> <span class="nav-text">理解就是生产力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E6%88%90%E4%BD%93%E7%B3%BB%E7%9A%84%E6%80%9D%E7%BB%B4"><span class="nav-number">2.</span> <span class="nav-text">不成体系的思维</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E6%98%8E%E7%A1%AE%E7%9B%AE%E7%9A%84%E5%BC%80%E5%A7%8B"><span class="nav-number">3.</span> <span class="nav-text">从明确目的开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E5%B0%B1%E6%98%AF%E6%95%88%E7%8E%87"><span class="nav-number">4.</span> <span class="nav-text">这就是效率</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Trace-w5"
+      src="/images/Chest.png">
+  <p class="site-author-name" itemprop="name">Trace-w5</p>
+  <div class="site-description" itemprop="description">如果你知道这个世界只是一个Minecraft</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Trace-w5</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
